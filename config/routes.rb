@@ -1,4 +1,8 @@
 BetterTumblr::Application.routes.draw do
+  get "tumblelog/Get_Blog"
+
+  get "tumblelog/Display_Blog"
+
   get "tumblelog/Tumblelog"
 
   # The priority is based upon order of creation:
@@ -50,7 +54,7 @@ BetterTumblr::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'Tumblelog#Tumblelog'
+  root :to => 'Tumblelog#Get_Blog'
 
   # See how all your routes lay out with "rake routes"
 
