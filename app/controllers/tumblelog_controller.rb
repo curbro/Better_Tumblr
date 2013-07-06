@@ -12,6 +12,10 @@ class TumblelogController < ApplicationController
           config.consumer_secret = BetterTumblr::Application.config.api_secret
         end
       client = Tumblr::Client.new
+      
+      if Tumblelog.exists?(:tumblelog => "#{$blog}")
+          redirect_to(better_tumblr_url(:blog => "#{$blog}"))
+      else
         @request = client.posts("#{$blog}.tumblr.com", :limit => 1)
         @total_posts = @request['blog']['posts'].to_i
         @total_text = 0
@@ -50,6 +54,8 @@ class TumblelogController < ApplicationController
           end
           break if @request['posts'].length != 50
         end
+        
+        
         obj = Tumblelog.find_or_initialize_by_tumblelog("#{$blog}")
         #instance_variable_set("@#{$blog}", Tumblelog.new)
         
@@ -64,21 +70,9 @@ class TumblelogController < ApplicationController
         obj[:total_posts] = @total_posts
         obj[:tumblelog] = "#{$blog}"
         obj.save
-=begin
-        instance_variable_get("@#{$blog}")[:total_text] = @total_text
-        instance_variable_get("@#{$blog}")[:total_video] = @total_video
-        instance_variable_get("@#{$blog}")[:total_photo] = @total_photo
-        instance_variable_get("@#{$blog}")[:total_quote] = @total_quote
-        instance_variable_get("@#{$blog}")[:total_link] = @total_link
-        instance_variable_get("@#{$blog}")[:total_audio] = @total_audio
-        instance_variable_get("@#{$blog}")[:total_chat] = @total_chat
-        instance_variable_get("@#{$blog}")[:total_answer] = @total_answer
-        instance_variable_get("@#{$blog}")[:total_posts] = @total_posts
-        instance_variable_get("@#{$blog}")[:tumblelog] = "#{$blog}"
-        #instance_variable_get("@#{$blog}")[:last_updated] = DateTime
-        instance_variable_get("@#{$blog}").save
-=end
-      end
-      
+        
+        redirect_to(better_tumblr_url(:blog => $blog))
+        end
+    end
   end
 end
