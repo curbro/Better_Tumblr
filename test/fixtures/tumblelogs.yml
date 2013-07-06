@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  tumblelog: 
+  total_posts: 
+  total_text: 
+  total_quote: 
+  total_link: 
+  total_answer: 
+  total_video: 
+  total_audio: 
+  total_photo: 
+  total_chat: 
+  last_updated: 2013-06-30 14:51:42
+
+two:
+  tumblelog: 
+  total_posts: 
+  total_text: 
+  total_quote: 
+  total_link: 
+  total_answer: 
+  total_video: 
+  total_audio: 
+  total_photo: 
+  total_chat: 
+  last_updated: 2013-06-30 14:51:42
