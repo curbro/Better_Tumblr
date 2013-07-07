@@ -16,3 +16,6 @@
 
 # Ignore the application.rb file because it contains api keys
 /config/application.rb
+
+# Ignore Trial.rb
+/Trial.rb

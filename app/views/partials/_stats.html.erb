@@ -1,0 +1,37 @@
+<div id='header'>
+		<% begin %>
+		<% blog = Tumblelog.find_by_tumblelog(params[:blog]) %>
+		<% rescue %>
+		<%= "Couldn't retrieve the object." %>
+		<% end %>
+		<div id='pick-a-blog'>
+			<a href='http://localhost:3000'>Pick a different blog.</a>
+		</div>
+		<div id='stats'>
+		<table id='table-header'>
+			<tr>
+				<td colspan="2"><a target='_blank' href='http://<%= "#{blog[:tumblelog]}.tumblr.com" %>'><h2><%=raw blog[:tumblelog].capitalize %></a></h2></td>
+			</tr>
+			<tr>
+				<td colspan="2"><%= link_to 'Photos', 'http://localhost:3000/justpics/bottomline' %></td>
+			</tr>
+			<tr>
+				<td><div id='avatar'><img src='<% %>'/></div></td>
+				<td><%= (blog[:total_video].to_f/blog[:total_posts].to_f*100.0).round(3) %>% of <%=raw blog[:tumblelog].capitalize %> is videos.<br><br><%=raw blog[:total_video] %> videos in <%=raw blog[:total_posts] %> total posts.</td>
+				<td><%= (blog[:total_photo].to_f/blog[:total_posts].to_f*100.0).round(3) %>% of <%=raw blog[:tumblelog].capitalize %> is photos.</td>
+			</tr>
+			<tr>
+				<td id='summary-counter' colspan="2"><h3>Videos <%=  %> to <%=  %> of <%= blog[:total_video] %>.</h3></td>
+			</tr>
+		</table>
+		</div>
+		<%= link_to 'Everything', :blog => blog[:tumblelog], :type => ''%>
+		<%= link_to 'Video', :blog => blog[:tumblelog], :type => 'videos' %>
+		<%= link_to 'Photo', :blog => blog[:tumblelog], :type => 'photos' %>
+		<%= link_to 'Text', :blog => blog[:tumblelog], :type => 'text' %>
+		<%= link_to 'Quote', :blog => blog[:tumblelog], :type => 'quote' %>
+		<%= link_to 'Link', :blog => blog[:tumblelog], :type => 'link' %>
+		<%= link_to 'Answer', :blog => blog[:tumblelog], :type => 'answer' %>
+		<%= link_to 'Audio', :blog => blog[:tumblelog], :type => 'audio' %>
+		<%= link_to 'Chat', :blog => blog[:tumblelog], :type => 'chat' %>		
+		</div>

@@ -1,0 +1,15 @@
+<% if params[:page] && params[:page].to_i != 1 %>
+	<% if params[:page].to_i == 2 %>
+		<a id='left' href='/justvids/bottomline'><div id='left'><img id='left-arrow' src='http://i.imgur.com/2ooKQ9F.png'></div></a>
+	<% else %>
+		<a id='left' href='<%= url_for :page => params[:page].to_i - 1 %>'><div id='left'><img id='left-arrow' src='http://i.imgur.com/2ooKQ9F.png'></div></a>
+	<% end %>
+<% end %>
+
+<% if $total_pages != params[:page].to_i %>
+	<% if !params[:page] || params[:page].to_i == 1%>
+		<a id='right' href='<%= url_for :page => params[:page].to_i + 2 %>'><div id='right'><img id='right-arrow' src='http://i.imgur.com/kesM0Cx.png'></div></a>
+	<% else %>
+		<a id ='right' href='<%= url_for :page => params[:page].to_i + 1 %>'><div id='right'><img id='right-arrow' src='http://i.imgur.com/kesM0Cx.png'></div></a>
+	<% end %>
+<% end %>

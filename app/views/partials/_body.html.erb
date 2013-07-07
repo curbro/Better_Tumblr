@@ -1,0 +1,38 @@
+<% @page_posts['posts'].each do |post| %>
+<% @general_counter = @general_counter + 1 %>			
+<div style='display:none;'>
+
+</div>
+<div id='content-wrapper'>
+<table>		
+	<tr>
+		<td><%= post['type'].capitalize %> <%= @general_counter+@offset %><br><a target="_blank" href='<%= post['short_url'] %>'>Posted on <%= post['date']%>.</a></td>
+		<!--TODO: WHY DOESN'T THE HELPER WORK?-->
+		<% type = post['type'] %>
+    	<% body = case type %>
+    	<% when 'video' then %>
+        	<% begin %>
+        	<td><%= post['player'][2]['embed_code'].html_safe %></td>
+        	<% rescue %>
+        	<td>Something went wrong with this post's html.</td>
+        	<% end %>
+
+    	<% when 'photo' then %>
+        	<% begin %>
+        	<% post['photos'].each do |photo|%>
+	        <td><img src='<%= photo['original_size']['url'] %>'><td>
+	        <% end %>
+	        <% rescue %>
+	        <td>Something went wrong with this post's html.</td>
+	        <% end %>
+	        
+    	<% end %>
+		<td><a href='http://www.tumblr.com/reblog/<%= post['id'] %>/<%= post['reblog_key'] %>?redirect_to=<%=raw request.url.to_uri %>'><img id="reblog-icon" src='http://i.imgur.com/FO48uvW.png'></a><br><a href='#code<%=raw @general_counter+@offset %>' id='embed' title='Video <%=raw @general_counter+@offset %>'>Embed Code</a></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><%= post['caption'].html_safe %></td>
+	</tr>
+</table>
+</div>
+<% end %>

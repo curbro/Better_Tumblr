@@ -1,23 +1,42 @@
 class TumblelogController < ApplicationController
+  helper :all
+  layout 'application'
+  def initialize
+    Tumblr.configure do |config|
+          config.consumer_key = BetterTumblr::Application.config.api_key
+          config.consumer_secret = BetterTumblr::Application.config.api_secret
+    end
+    @client = Tumblr::Client.new
+  end
+  
   def Display_Blog
+    @blog = params[:blog]
+    @display_stats = true
+    @display_body = true
+    @display_pagination = true
+    @page_posts = @client.posts("#{@blog}.tumblr.com", :limit => 10)    
+    @general_counter = 0
+    @offset = 0
+
+    render 'app/views/layouts/application.html.erb'
   end
   
   def Get_Blog
-    
-    if params[:blogname] 
-      $blog = params[:blogname]
-    
-      Tumblr.configure do |config|
-          config.consumer_key = BetterTumblr::Application.config.api_key
-          config.consumer_secret = BetterTumblr::Application.config.api_secret
-        end
-      client = Tumblr::Client.new
-      
-      if Tumblelog.exists?(:tumblelog => "#{$blog}")
-          redirect_to(better_tumblr_url(:blog => "#{$blog}"))
+    @display_stats = false
+    @display_body = false
+    @display_pagination = false
+
+    if params[:blog] 
+      @blog = params[:blog]
+
+      if Tumblelog.exists?(:tumblelog => "#{@blog}")
+          @display_stats = true
+          @display_body = true
+          @display_pagination = true
+          redirect_to(better_tumblr_url(:blog => @blog))
       else
-        @request = client.posts("#{$blog}.tumblr.com", :limit => 1)
-        @total_posts = @request['blog']['posts'].to_i
+        @page_posts = @client.posts("#{@blog}.tumblr.com", :limit => 10)
+        @total_posts = @page_posts['blog']['posts'].to_i
         @total_text = 0
         @total_quote = 0
         @total_link = 0
@@ -29,7 +48,7 @@ class TumblelogController < ApplicationController
       
       x = 0
         loop do
-          @request = client.posts("#{$blog}.tumblr.com", :limit => 50, :offset => x)
+          @request = client.posts("#{@blog}.tumblr.com", :limit => 50, :offset => x)
           x = x + @request['posts'].length
           
           @request['posts'].each do |post|
@@ -56,7 +75,7 @@ class TumblelogController < ApplicationController
         end
         
         
-        obj = Tumblelog.find_or_initialize_by_tumblelog("#{$blog}")
+        obj = Tumblelog.find_or_initialize_by_tumblelog("#{@blog}")
         #instance_variable_set("@#{$blog}", Tumblelog.new)
         
         obj[:total_text] = @total_text
@@ -68,11 +87,17 @@ class TumblelogController < ApplicationController
         obj[:total_chat] = @total_chat
         obj[:total_answer] = @total_answer
         obj[:total_posts] = @total_posts
-        obj[:tumblelog] = "#{$blog}"
+        obj[:tumblelog] = "#{@blog}"
         obj.save
         
-        redirect_to(better_tumblr_url(:blog => $blog))
+        @display_stats = true
+        @display_body = true
+        @display_pagination = true
+        redirect_to(better_tumblr_url(:blog => @blog))
         end
     end
+    @display_stats = true
+    @display_body = true
+    @display_pagination = true
   end
 end
